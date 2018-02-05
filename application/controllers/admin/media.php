@@ -2,6 +2,7 @@
 
 class Media extends Admin
 {
+	
     public function __construct()
     {
 		parent::__construct();
@@ -92,11 +93,11 @@ class Media extends Admin
 
 		if ($this->input->get('directory'))
 		{
-			$data['directory'] = $this->_DIR_MEDIA . '/' . $this->input->get('directory');
+			$data['directory'] = urlencode($this->input->get('directory'));
 		}
 		else
 		{
-			$data['directory'] = $this->_DIR_MEDIA;;
+			$data['directory'] = '';
 		}
 
 		if ($this->input->get('thumb'))
@@ -172,6 +173,185 @@ class Media extends Admin
 		$data['template'] = 'admin/media/index';
 		$data['script']   = 'admin/script';
 		$this->load->view('admin/app/blank', $data);
+	}
+	
+
+    public function upload()
+    {
+		$response = [];
+		
+		if ($this->input->get('directory'))
+		{
+			$directory = $this->_DIR_MEDIA . '/' . $this->input->get('directory');
+		}
+		else
+		{
+			$directory = $this->_DIR_MEDIA;
+        }
+        
+        if (is_dir($directory))
+		{
+			$config['upload_path'] = $directory;
+			$config['allowed_types'] = 'jpg|png|gif';
+			$config['max_width'] = 0;
+			$config['max_height'] = 0;
+			$config['remove_spaces'] = TRUE;
+			
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			if ($this->upload->do_upload('file'))
+			{
+				$response = [
+					'success' => true,
+					'message' => 'Upload file success.'
+				];
+			}
+			else
+			{
+				$response = [
+					'success' => false,
+					'message' => 'The file is not formatted correctly.'
+				];
+			}
+        }
+        else
+        {
+            $response = [
+				'success' => false,
+				'message' => 'Folder does not exist.'
+            ];
+        }
+
+        header("Content-Type: application/json");
+		echo utf8_encode(json_encode($response));
+    }
+
+    public function folder()
+    {
+        if ($this->input->get('directory'))
+        {
+            $directory = $this->_DIR_MEDIA . '/' . $this->input->get('directory');
+        }
+        else
+        {
+            $directory = $this->_DIR_MEDIA;
+        }
+
+        if (is_dir($directory))
+        {
+            $folder = $this->input->post('folder');
+
+            if ((strlen($folder) < 3) || (strlen($folder) > 128))
+            {
+                $response = [
+                    'success' => false,
+                    'message' => 'The directory name is invalid.'
+                ];
+            }
+            else if (is_dir($directory . '/' . $folder))
+            {
+                $response = [
+                    'success' => false,
+                    'message' => 'Folder already exists.'
+                ];
+            }
+            else
+            {
+                mkdir($directory . '/' . $folder, 0777);
+
+                $response = [
+                    'success' => true,
+                    'message' => 'Add folder success.'
+                ];
+            }
+        }
+        else
+        {
+            $response = [
+                'success' => false,
+                'message' => 'Folder error.'
+            ];
+        }
+
+        header("Content-Type: application/json");
+		echo utf8_encode(json_encode($response));
+    }
+
+    public function delete()
+    {
+		$response = [];
+
+        if ($this->input->post('path'))
+        {
+            $paths = $this->input->post('path');
+        }
+
+        foreach($paths as $path)
+        {
+            $path = rtrim($this->_DIR_MEDIA . str_replace(['../', '..\\', '..'], '', $path), '/');
+            
+            if ($path == $this->_DIR_MEDIA)
+            {
+                $response = [
+                    'success' => false,
+                    'message' => 'Incorrect path.'
+                ];
+            }
+            break;
+        }
+
+        foreach($paths as $path)
+        {
+            $path = rtrim(str_replace(['../', '..\\', '..'], '', $path));
+
+            if (is_file($path))
+            {
+                unlink($path);
+            }
+            else if (is_dir($path))
+            {
+                $files = [];
+                $path = [
+                    $path . '*'
+                ];
+
+                while (count($path) != 0)
+                {
+                    $next = array_shift($path);
+                    foreach (glob($next) as $file)
+                    {
+                        if (is_dir($file))
+                        {
+                            $path[] = $file . '/*';
+                        }
+                        $files[] = $file;
+                    }
+                }
+                
+                rsort($files);
+
+                foreach ($files as $file)
+                {
+                    if (is_file($file))
+                    {
+                        unlink($file);
+                    }
+                    else if (is_dir($file))
+                    {
+                        rmdir($file);
+                    }
+                }
+            }
+        }
+
+        $response = [
+            'success' => true,
+            'message' => 'Delete success.'
+        ];
+
+        header("Content-Type: application/json");
+		echo utf8_encode(json_encode($response));
     }
 }
 

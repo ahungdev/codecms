@@ -19,7 +19,6 @@ var BE = {
                     $('.modal-media').modal('show');
 				}
 			});
-			obj.popover('hide');
         });
 
         $('.btn-remove').on('click', function (evt) {
@@ -42,7 +41,6 @@ var BE = {
 					$('.modal-media').modal('show');
 				}
      		});
-			obj.popover('hide');
 		});
     }
 };

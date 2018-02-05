@@ -15,7 +15,7 @@
 				</div>
 				<div class="col-sm-6">
 					<div class="input-group">
-						<input type="text" name="search" value="" placeholder="Search..." class="form-control">
+						<input type="text" name="search" placeholder="Search..." class="form-control" value="<?php echo $search; ?>" />
 						<div class="input-group-btn">
 							<button type="button" data-toggle="tooltip" title="Search" class="btn btn-primary btn-search"><i class="fa fa-search" aria-hidden="true"></i></button>
 						</div>
@@ -73,6 +73,103 @@
 		$('.btn-refresh').on('click', function (evt) {
 			evt.preventDefault();
 			$('.modal-media').load($(this).attr('href'));
+		});
+
+		$('.btn-folder').popover({
+			html: true,
+			placement: 'bottom',
+			trigger: 'click',
+			title: 'Folder Name',
+			content: function() {
+				return '<div class="input-group">'+
+				'<input type="text" name="folder" placeholder="Folder Name" class="form-control">'+
+				'<span class="input-group-btn">'+
+					'<button type="button" title="Add Folder" class="btn btn-primary btn-create"><i class="fa fa-plus-circle"></i></button>'+
+					'</span>'+
+				'</div>';
+			}
+		});
+	
+		$('.btn-folder').on('shown.bs.popover', function() {
+			$('.btn-create').on('click', function () {
+				$.ajax({
+					url: _siteURL + '/media/folder?action=upload&directory=<?php echo $directory; ?>',
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						folder: $('input[name="folder"]').val()
+					},
+					success: function(response) {
+						if (response.success) {
+							$('.btn-refresh').trigger('click');
+						} else {
+							alert(response.message);
+						}
+					}
+				});
+			});
+		});
+
+		$('.btn-upload').on('click', function (evt) {
+			evt.preventDefault();
+			$('.form-upload').remove();
+			$('body').append('<form class="form-upload" enctype="multipart/form-data" style="display: none;"><input type="file" name="file" /></form>');
+			$('input[name=\'file\']').trigger('click');
+			$('input[name=\'file\']').on('change', function() {
+				$.ajax({
+					url: _siteURL + '/media/upload?action=upload&directory=<?php echo $directory; ?>',
+					type: 'POST',
+					dataType: 'json',
+					data: new FormData($(this).parent()[0]),
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: function(response) {
+						if (response.success) {
+							$('.btn-refresh').trigger('click');
+						} else {
+							alert(response.message);
+						}
+					}
+				});
+			});
+		});
+
+		$('.btn-search').on('click', function (evt) {
+			evt.preventDefault();
+			var url = _siteURL + '/media?action=upload&directory=<?php echo $directory; ?>';
+			var search = $('input[name=\'search\']').val();
+			if (search) {
+				url += '&search=' + encodeURIComponent(search);
+			}
+			<?php if ($thumb) { ?>
+				url += '&thumb=<?php echo $thumb; ?>';
+			<?php } ?>
+			<?php if ($target) { ?>
+				url += '&target=<?php echo $target; ?>';
+			<?php } ?>
+
+			$('.modal-media').load(url);
+		});
+
+		$('.btn-delete').on('click', function (evt) {
+			evt.preventDefault();
+			if (confirm('You are sure')) {
+				$.ajax({
+					url: _siteURL + '/media/delete',
+					type: 'POST',
+					dataType: 'json',
+					data: $('input[name^=\'path\']:checked'),
+					success: function(response) {
+						if (response.success) {
+							$('.btn-refresh').trigger('click');
+							
+						} else {
+							alert(response.message);
+						}
+					}
+				});
+			}
 		});
 
 		$('.link-media').on('click', function (evt) {

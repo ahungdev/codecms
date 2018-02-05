@@ -12,7 +12,7 @@ class Users extends Admin
 	{
 		$data['title']    = 'Users';
 		$data['template'] = 'admin/users/index';
-		$data['js']       = 'admin/js';
+		$data['script']   = 'admin/script';
 		$this->load->view('admin/app/master', $data);
     }
 }

@@ -9,6 +9,5 @@
         <?php $this->load->view($template); ?>
         <?php $this->load->view('admin/app/footer'); ?>
     </main>
-    <?php $this->load->view('admin/app/script'); ?>
 </body>
 </html>

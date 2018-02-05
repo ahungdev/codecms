@@ -17,7 +17,7 @@ class Dashboard extends Auth
 
 		$data['title']    = 'Dashboard';
 		$data['template'] = 'admin/dashboard/index';
-		$data['js']       = 'admin/js';
+		$data['script']   = 'admin/script';
 		$this->load->view('admin/app/master', $data);
     }
     
@@ -28,7 +28,7 @@ class Dashboard extends Auth
             redirect('admin');
         }
 
-        $this->form_validation->set_error_delimiters('<p><i class="fa fa-times-circle"></i> ', '</p>')
+        $this->form_validation->set_error_delimiters('<p><i class="fa fa-times-circle" aria-hidden="true"></i> ', '</p>')
             ->set_rules('email', 'email', 'trim|required')
             ->set_rules('password', 'password', 'trim|required');
 
@@ -78,7 +78,7 @@ class Dashboard extends Auth
         }
 
 		$data['title']    = 'Login';
-		$data['js']       = 'admin/js';
+		$data['script']   = 'admin/script';
 		$this->load->view('admin/login/index', $data);
     }
     

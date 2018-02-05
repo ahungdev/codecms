@@ -81,6 +81,42 @@ class Media extends Admin
 			}
 		}
 
+		if ($this->input->get('search'))
+		{
+			$data['search'] = $this->input->get('search');
+		}
+		else
+		{
+			$data['search'] = '';
+		}
+
+		if ($this->input->get('directory'))
+		{
+			$data['directory'] = $this->_DIR_MEDIA . '/' . $this->input->get('directory');
+		}
+		else
+		{
+			$data['directory'] = $this->_DIR_MEDIA;;
+		}
+
+		if ($this->input->get('thumb'))
+		{
+			$data['thumb'] = $this->input->get('thumb');
+		}
+		else
+		{
+			$data['thumb'] = '';
+		}
+
+		if ($this->input->get('target'))
+		{
+			$data['target'] = $this->input->get('target');
+		}
+		else
+		{
+			$data['target'] = '';
+		}
+
 		$url = '';
 
 		if ($this->input->get('directory'))
@@ -134,8 +170,8 @@ class Media extends Admin
 		$data['lists']    = $lists;
 		$data['title']    = 'Media';
 		$data['template'] = 'admin/media/index';
-		$data['js']       = 'admin/js';
-		$this->load->view('admin/app/master', $data);
+		$data['script']   = 'admin/script';
+		$this->load->view('admin/app/blank', $data);
     }
 }
 

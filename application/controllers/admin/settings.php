@@ -12,7 +12,7 @@ class Settings extends Admin
 	{
 		$data['title']    = 'Settings';
 		$data['template'] = 'admin/settings/index';
-		$data['js']       = 'admin/js';
+		$data['script']   = 'admin/script';
 		$this->load->view('admin/app/master', $data);
     }
 }

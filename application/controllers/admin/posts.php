@@ -12,7 +12,7 @@ class Posts extends Admin
 	{
 		$data['title']    = 'Posts';
 		$data['template'] = 'admin/posts/index';
-		$data['js']       = 'admin/js';
+		$data['script']   = 'admin/script';
 		$this->load->view('admin/app/master', $data);
     }
 }

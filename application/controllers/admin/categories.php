@@ -12,7 +12,7 @@ class Categories extends Admin
 	{
 		$data['title']    = 'Categories';
 		$data['template'] = 'admin/categories/index';
-		$data['js']       = 'admin/js';
+		$data['script']   = 'admin/script';
 		$this->load->view('admin/app/master', $data);
     }
 }

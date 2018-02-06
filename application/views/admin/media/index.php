@@ -89,11 +89,11 @@
 				'</div>';
 			}
 		});
-	
+
 		$('.btn-folder').on('shown.bs.popover', function() {
 			$('.btn-create').on('click', function () {
 				$.ajax({
-					url: _siteURL + '/media/folder?action=upload&directory=<?php echo $directory; ?>',
+					url: _siteURL + '/media/folder?action=folder&directory=<?php echo $directory; ?>',
 					type: 'POST',
 					dataType: 'json',
 					data: {
@@ -137,7 +137,7 @@
 
 		$('.btn-search').on('click', function (evt) {
 			evt.preventDefault();
-			var url = _siteURL + '/media?action=upload&directory=<?php echo $directory; ?>';
+			var url = _siteURL + '/media?action=search&directory=<?php echo $directory; ?>';
 			var search = $('input[name=\'search\']').val();
 			if (search) {
 				url += '&search=' + encodeURIComponent(search);
@@ -163,7 +163,7 @@
 					success: function(response) {
 						if (response.success) {
 							$('.btn-refresh').trigger('click');
-							
+
 						} else {
 							alert(response.message);
 						}

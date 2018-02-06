@@ -2,14 +2,14 @@
 
 class Media extends Admin
 {
-	
+
     public function __construct()
     {
 		parent::__construct();
 		$this->_URL_MEDIA = base_url() . 'uploads';
 		$this->_DIR_MEDIA = realpath(APPPATH . '../uploads');
     }
-    
+
 	public function index()
 	{
 		if ($this->input->get('search'))
@@ -39,9 +39,8 @@ class Media extends Admin
 			$page = 1;
 		}
 
-		$directories    = glob($directory . '/' . $search . '*', GLOB_ONLYDIR);
-		$files = glob($directory . '/' . $search . '*.{jpg,jpeg,png,gif,mp4,ogg,webm,pdf,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
-
+		$directories = glob($directory . '/' . $search . '*', GLOB_ONLYDIR);
+		$files       = glob($directory . '/' . $search . '*.{jpg,jpeg,png,gif,mp4,ogg,webm,pdf,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
 		$media       = array_merge($directories, $files);
 		$image_total = count($media);
 		$items       = array_splice($media, ($page - 1) * 8, 8);
@@ -63,7 +62,7 @@ class Media extends Admin
 				{
 					$thumb = $this->input->get('thumb');
 				}
-				
+
 				$lists[] = [
 					'name' => $name,
 					'type' => 'directory',
@@ -81,6 +80,8 @@ class Media extends Admin
                 ];
 			}
 		}
+
+		$data['lists'] = $lists;
 
 		if ($this->input->get('search'))
 		{
@@ -123,7 +124,7 @@ class Media extends Admin
 		if ($this->input->get('directory'))
 		{
 			$pos = strrpos($this->input->get('directory'), '/');
-			
+
 			if ($pos)
 			{
 				$url .= '&directory=' . urlencode(substr($this->input->get('directory'), 0, $pos));
@@ -140,7 +141,7 @@ class Media extends Admin
 			$url .= '&thumb=' . $this->input->get('thumb');
 		}
 
-		$data['parent'] = site_url('admin/media?action=upload' . $url);
+		$data['parent'] = site_url('admin/media?action=parent' . $url);
 
 		$url = '';
 
@@ -159,27 +160,26 @@ class Media extends Admin
 			$url .= '&thumb=' . $this->input->get('thumb');
 		}
 
-		$data['refresh'] = site_url('admin/media?action=upload' . $url);
+		$data['refresh'] = site_url('admin/media?action=refresh' . $url);
 
 		$number                      = 8;
 		$total_rows                  = $image_total;
-		$config                      = $this->paging->create($total_rows, $number, site_url('admin/media?action=upload' . $url), 3);
+		$config                      = $this->paging->create($total_rows, $number, site_url('admin/media?action=showall' . $url), 3);
 		$config['page_query_string'] = TRUE;
 		$config['use_page_numbers']  = TRUE;
 		$config['query_string_segment'] = 'page';
 		$this->pagination->initialize($config);
-		$data['lists']    = $lists;
 		$data['title']    = 'Media';
 		$data['template'] = 'admin/media/index';
 		$data['script']   = 'admin/script';
 		$this->load->view('admin/app/blank', $data);
 	}
-	
+
 
     public function upload()
     {
 		$response = [];
-		
+
 		if ($this->input->get('directory'))
 		{
 			$directory = $this->_DIR_MEDIA . '/' . $this->input->get('directory');
@@ -188,7 +188,7 @@ class Media extends Admin
 		{
 			$directory = $this->_DIR_MEDIA;
         }
-        
+
         if (is_dir($directory))
 		{
 			$config['upload_path'] = $directory;
@@ -196,7 +196,7 @@ class Media extends Admin
 			$config['max_width'] = 0;
 			$config['max_height'] = 0;
 			$config['remove_spaces'] = TRUE;
-			
+
 			$this->load->library('upload', $config);
 			$this->upload->initialize($config);
 
@@ -290,7 +290,7 @@ class Media extends Admin
         foreach($paths as $path)
         {
             $path = rtrim($this->_DIR_MEDIA . str_replace(['../', '..\\', '..'], '', $path), '/');
-            
+
             if ($path == $this->_DIR_MEDIA)
             {
                 $response = [
@@ -328,7 +328,7 @@ class Media extends Admin
                         $files[] = $file;
                     }
                 }
-                
+
                 rsort($files);
 
                 foreach ($files as $file)

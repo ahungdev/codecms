@@ -139,12 +139,15 @@
 			evt.preventDefault();
 			var url = _siteURL + '/media?action=search&directory=<?php echo $directory; ?>';
 			var search = $('input[name=\'search\']').val();
+
 			if (search) {
 				url += '&search=' + encodeURIComponent(search);
 			}
+
 			<?php if ($thumb) { ?>
 				url += '&thumb=<?php echo $thumb; ?>';
 			<?php } ?>
+
 			<?php if ($target) { ?>
 				url += '&target=<?php echo $target; ?>';
 			<?php } ?>

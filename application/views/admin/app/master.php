@@ -6,7 +6,10 @@
 <body>
     <main class="main">
         <?php $this->load->view('admin/app/nav'); ?>
-        <?php $this->load->view($template); ?>
+        <div class="container-fluid">
+            <?php $this->load->view('admin/app/alert'); ?>
+            <?php $this->load->view($template); ?>
+        </div>
         <?php $this->load->view('admin/app/footer'); ?>
     </main>
 </body>

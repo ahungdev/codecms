@@ -11,5 +11,5 @@ class Admin_Model extends MY_Model
 	}
 }
 
-/* End of file user_model.php */
-/* Location: ./application/core/user_model.php */
+/* End of file admin_model.php */
+/* Location: ./application/core/admin_model.php */

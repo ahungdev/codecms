@@ -79,7 +79,8 @@ $autoload['helper'] = [
     'form',
     'html',
     'security',
-    'login'
+    'login',
+    'search'
 ];
 
 

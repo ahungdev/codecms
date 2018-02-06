@@ -8,6 +8,8 @@ var BE = {
             height: 300
         });
 
+        $('[data-toggle="tooltip"]').tooltip();
+
         $('.btn-picture').on('click', function (evt) {
             evt.preventDefault();
             var obj = $(this);

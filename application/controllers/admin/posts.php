@@ -49,13 +49,13 @@ class Posts extends Admin
 		$data['script']   = 'admin/script';
 
         $this->form_validation->set_error_delimiters('<p><i class="fa fa-times-circle"></i> ', '</p>')
-			->set_rules('post-name', 'Title', 'trim|required')
+			->set_rules('post-title', 'Title', 'trim|required')
             ->set_rules('post-slug', 'Slug', 'trim|required');
 
 		if ($this->form_validation->run() == TRUE)
 		{
 			$data = array(
-				'title' => $this->input->post('post-name'),
+				'title' => $this->input->post('post-title'),
                 'slug'  => $this->input->post('post-slug')
 			);
 			$result = $this->post_model->create($data);

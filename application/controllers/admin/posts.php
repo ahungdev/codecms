@@ -5,9 +5,8 @@ class Posts extends Admin
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('admin_model');
     }
-    
+
 	public function index()
 	{
 		$data['title']    = 'Posts';

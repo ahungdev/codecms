@@ -26,6 +26,10 @@ html, body {
     height: 100%;
 }
 
+.hide {
+    display: none;
+}
+
 .login {
     position: relative;
     width: 100%;
@@ -106,6 +110,37 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
+    width: 3rem;
+    height: 3rem;
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.files figure input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    cursor: pointer;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.files figure span {
+    position: absolute;
+    width: 2rem;
+    height: 1rem;
+    display: none;
+    border-left: 2px solid #337ab7;
+    border-bottom: 2px solid #337ab7;
+    transform: rotate(-45deg);
+    top: 0.6rem;
+    left: 0.6rem;
+}
+
+.files figure input:checked ~ span {
+    display: block;
 }
 
 .form-media {
@@ -124,3 +159,68 @@ html, body {
 .tab-content {
     padding: 15px 0;
 }
+
+.loader {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.75);
+  background-size: cover;
+  z-index: 999; }
+  .loader-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px; }
+    .loader-body span {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: absolute;
+      border: 2px solid #fff;
+      border-bottom: none;
+      border-right: none; }
+    .loader-body .loader-1 {
+      width: 10rem;
+      height: 10rem;
+      left: 0;
+      top: 0;
+      -webkit-animation: loader 1.5s linear infinite;
+              animation: loader 1.5s linear infinite; }
+    .loader-body .loader-2 {
+      width: 8rem;
+      height: 8rem;
+      left: 1rem;
+      top: 1rem;
+      -webkit-animation: loader 2s linear infinite;
+              animation: loader 2s linear infinite; }
+
+@-webkit-keyframes loader {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes loader {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }

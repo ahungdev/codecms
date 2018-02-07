@@ -6,6 +6,7 @@ class Posts extends Admin
     {
         parent::__construct();
         $this->load->model('post_model');
+        $this->load->model('category_model');
     }
 
 	public function index($paging = 0)
@@ -31,6 +32,7 @@ class Posts extends Admin
 		}
 
 		$data['home']     = TRUE;
+        $data['export']   = TRUE;
 		$data['lists']    = $rows;
 		$data['total']    = $total_number;
 		$data['num']      = $num_pages;
@@ -44,6 +46,7 @@ class Posts extends Admin
     public function create()
 	{
         $data['button']   = TRUE;
+        $data['category'] = $this->category_model->fetch_all();
 		$data['title']    = 'Create Post';
 		$data['template'] = 'admin/posts/create';
 		$data['script']   = 'admin/script';
@@ -54,10 +57,16 @@ class Posts extends Admin
 
 		if ($this->form_validation->run() == TRUE)
 		{
-			$data = array(
-				'title' => $this->input->post('post-title'),
-                'slug'  => $this->input->post('post-slug')
-			);
+			$data = [
+                'title'       => $this->input->post('post-title'),
+                'slug'        => $this->input->post('post-slug'),
+                'intro'       => $this->input->post('post-intro'),
+                'content'     => $this->input->post('post-content'),
+                'thumbnail'   => $this->input->post('post-thumbnail'),
+                'category_id' => $this->input->post('post-cateogry'),
+                'status'      => $this->input->post('post-status')
+			];
+
 			$result = $this->post_model->create($data);
 			$this->session->set_flashdata('flash_message', 'The post added.');
 			redirect('admin/posts');
@@ -80,7 +89,7 @@ class Posts extends Admin
 		}
 
         $data['button']   = TRUE;
-		$data['cate']     = $this->post_model->fetch_all();
+		$data['category'] = $this->category_model->fetch_all();
 		$data['item']     = $item;
 		$data['title']    = 'Edit Post';
 		$data['template'] = 'admin/posts/edit';
@@ -92,9 +101,14 @@ class Posts extends Admin
 		if ($this->form_validation->run() == TRUE)
         {
 			$data_post = [
-                'title'      => $this->input->post('post-title'),
-                'slug'       => $this->input->post('post-slug'),
-                'updated_at' => date('Y-m-d H:i:s', now())
+                'title'       => $this->input->post('post-title'),
+                'slug'        => $this->input->post('post-slug'),
+                'intro'       => $this->input->post('post-intro'),
+                'content'     => $this->input->post('post-content'),
+                'thumbnail'   => $this->input->post('post-thumbnail'),
+                'category_id' => $this->input->post('post-cateogry'),
+                'status'      => $this->input->post('post-status'),
+                'updated_at'  => date('Y-m-d H:i:s', now())
 			];
 
 			$result = $this->post_model->update($data_post, $where_post);
